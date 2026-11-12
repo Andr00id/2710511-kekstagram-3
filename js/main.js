@@ -1,4 +1,4 @@
-const names = [
+const NAMES = [
   'Александр',
   'Елена',
   'Дмитрий',
@@ -21,7 +21,7 @@ const names = [
   'Виктория'
 ];
 
-const messages = [
+const MESSAGES = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
@@ -30,7 +30,7 @@ const messages = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
 
-const photoDescriptions = [
+const DESCRIPTION = [
   'Завораживающий закат над горным хребтом, окрашивающий небо в теплые оттенки розового и золотого.',
   'Уютная чашка свежесваренного капучино с красивым латте-артом на деревянном столе утреннего кафе.',
   'Узкая мощеная улочка старого европейского города, утопающая в зелени и ярких цветах на балконах.',
@@ -85,18 +85,35 @@ function getRandomElements (array, count) {
 }
 
 
-const photo = {
-  id: getId(1, 25),
-  url: `photos/${photo.id}.jpg`,
-  description: photoDescriptions[getRandomInteger(0, photoDescriptions.length - 1)],
-  likes: getRandomInteger(15, 200),
-  comments: []
+function comments() {
+  const id = getId(1, 100)();
+  return {
+    id: id,
+    avatar: `img/avatar-${getRandomInteger(1, 6)}.svg`,
+    message: getRandomElements(MESSAGES, getRandomInteger(1, 2)).join(' '),
+    name: NAMES[getRandomInteger(0, NAMES.length - 1)]
+  };
+}
 
-};
+const arrComments = [];
 
-const comments = {
-  id: getId(1, 100),
-  avatar: `img/avatar-${getRandomInteger(1, 6)}.svg`,
-  message: getRandomElements(messages, getRandomInteger(1, 2)).join(' '),
-  name: names[getRandomInteger(0, names.length - 1)]
-};
+for (let i = 0; i < 100; i++){
+  arrComments.push(comments());
+}
+
+function photos() {
+  const id = getId(1, 25)();
+  return {
+    id: id,
+    url: `photos/${id}.jpg`,
+    description: DESCRIPTION[getRandomInteger(0, DESCRIPTION.length - 1)],
+    likes: getRandomInteger(15, 200),
+    comments: Array.from({length: getRandomInteger(0, 30)}, comments)
+  };
+}
+
+const arrPhotos = [];
+
+for (let i = 0; i < 25; i++) {
+  arrPhotos.push(photos());
+}
